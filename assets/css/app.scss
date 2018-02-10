@@ -1,0 +1,33 @@
+/* This file is for your main application css. */
+
+@import "bootstrap";
+
+.side { padding: 4ex; text-align: center; }
+h1 { text-align: center; }
+p { font-size: 24px;}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    background-color: blue;
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.grid-item {
+    border: 2px solid black;
+    text-align: center;
+    font-size: 30px;
+    background-color: lightblue;
+    margin: 5px;
+
+}
+
+.clicked {
+    color: yellow;
+}
+
+.grid-item:hover {
+    background-color: brown;
+}

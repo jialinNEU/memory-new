@@ -9,6 +9,14 @@ export default function game_init(root) {
 
 class Memory extends React.Component {
 
+
+  /**
+  channel.join()
+    .receive("ok", resp => { console.log("Joined successfully", resp); })
+    .receive("error", resp => { console.log("Unable to join", resp); });
+
+  */
+
   constructor(props) {
     super(props);
     this.state = {

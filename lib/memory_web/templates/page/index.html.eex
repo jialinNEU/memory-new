@@ -1,5 +1,11 @@
 <h1>Memory Game</h1>
 <hr>
-<div id="game">
-  Loading...
+<div class="row">
+  <div class="col">
+    <h2 id="index-page">Join Your Game: </h2>
+    <input type="text" name="name" id="name-input">
+    <!--<a href="/memory/demo">Join</a>-->
+
+    <button id="confirm-btn">Confirm</button>
+  </div>
 </div>

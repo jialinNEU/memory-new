@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from 'reactstrap';
 
-export default function game_init(root) {
-  ReactDOM.render(<Memory />, root);
+export default function game_init(root, channel) {
+  ReactDOM.render(<Memory channel={channel} />, root);
 }
 
 
@@ -19,23 +19,46 @@ class Memory extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.channel = props.channel;
+
+    this.channel.join()
+      .receive("ok", this.gotView.bind(this))
+      .receive("error", resp => { console.log("Unable to join", resp); });
+
+
     this.state = {
       attempts: 0,
       score: 0,
       pre_card_idx: -1,
-      cards: _.shuffle(init()),
+      cards: [],
       screen_disabled: false
     }
   }
 
+
+
+  gotView(msg) {
+    console.log("Got View", msg);
+    this.setState(msg.view);
+    console.log(this.state);
+  }
+
+/*
   update_score(points) {
     let preScore = this.state.score;
     this.setState({
       score: preScore + points
     });
   }
+*/
 
+  user_click(index) {
+    this.channel.push("user_click", { index: index} )
+        .receive("ok", this.gotView.bind(this));
+  }
 
+/*
   handle_click(index) {
 
     let cards = this.state.cards;
@@ -69,10 +92,16 @@ class Memory extends React.Component {
     })
 
 
+
+
+console.log(attempts);
+
     if(attempts % 2 == 0) {
 
       let pre_card = cards[pre_card_idx];
       let card = cards[index];
+
+      console.log(pre_card);
 
       if(card.letter === pre_card.letter) {
 
@@ -110,9 +139,9 @@ class Memory extends React.Component {
       });
     }
   }
+*/
 
-
-
+/*
   cal_open_cards() {
     let cards = this.state.cards;
     let openCards = _.filter(cards, (card) => {
@@ -120,21 +149,25 @@ class Memory extends React.Component {
     })
     return openCards.length;
   }
-
+*/
 
   restart() {
+
+    /*
     this.setState({
       attempts: 0,
       score: 0,
       pre_card_idx: -1,
-      cards: _.shuffle(init())
+      cards: _.shuffle(init()),
+      screen_disabled: false
     });
+    */
   }
 
 
 
   render(){
-    let cards = init();
+    let cards = this.state.cards;
 
     return(
       <div className='container'>
@@ -169,24 +202,24 @@ class Memory extends React.Component {
 function Card(props) {
   let cards = props.root.state.cards;
 
-
   if(cards[props.index].match == true) {
     let letter = cards[props.index].letter;
     return (
-      <div className="open-card" key={props.index}>{letter}</div>
+      <div className="open-card">{letter}</div>
     );
   }
 
   else if(cards[props.index].flag == true) {
     let letter = cards[props.index].letter;
     return (
-      <div className="middle-card" key={props.index}>{letter}</div>
+      <div className="middle-card">{letter}</div>
     );
   }
 
   else {
     return (
-      <div className='hide-card' key={props.index} onClick={ () => props.root.handle_click(props.index)}>?</div>
+      //<div className='hide-card' key={props.index} onClick={ () => props.root.handle_click(props.index)}>?</div>
+      <div className='hide-card' onClick={ () => props.root.user_click(props.index)}>?</div>
     );
   }
 }
@@ -213,27 +246,4 @@ function Score(props) {
       <p><b>Your Score: { score }</b></p>
     </div>
   );
-}
-
-
-function init() {
-  const cards = [
-    {letter: 'A', flag: false, match: false, index: 0},
-    {letter: 'A', flag: false, match: false, index: 1},
-    {letter: 'B', flag: false, match: false, index: 2},
-    {letter: 'B', flag: false, match: false, index: 3},
-    {letter: 'C', flag: false, match: false, index: 4},
-    {letter: 'C', flag: false, match: false, index: 5},
-    {letter: 'D', flag: false, match: false, index: 6},
-    {letter: 'D', flag: false, match: false, index: 7},
-    {letter: 'E', flag: false, match: false, index: 8},
-    {letter: 'E', flag: false, match: false, index: 9},
-    {letter: 'F', flag: false, match: false, index: 10},
-    {letter: 'F', flag: false, match: false, index: 11},
-    {letter: 'G', flag: false, match: false, index: 12},
-    {letter: 'G', flag: false, match: false, index: 13},
-    {letter: 'H', flag: false, match: false, index: 14},
-    {letter: 'H', flag: false, match: false, index: 15}
-  ];
-  return cards;
 }

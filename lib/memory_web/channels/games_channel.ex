@@ -1,12 +1,30 @@
 defmodule MemoryWeb.GamesChannel do
   use MemoryWeb, :channel
 
+  alias Memory.Game
+
   def join("games:" <> name, payload, socket) do
     if authorized?(payload) do
-      {:ok, %{"joined_channel" => name}, socket}
+
+      game = Game.new()
+
+      socket = socket
+      |> assign(:game, game)
+      |> assign(:name, name)
+
+      {:ok, %{ "view" => Game.client_view(game) }, socket}
     else
       {:error, %{reason: "unauthorized"}}
     end
+  end
+
+
+
+  def handle_in("user_click", %{"index" => idx}, socket) do
+    game0 = socket.assigns[:game]
+    game1 = Game.handle_click(game0, idx);
+    socket = assign(socket, :game, game1)
+    {:reply, {:ok, %{"view" => Game.client_view(game1)} }, socket}
   end
 
   # Channels can be used in a request/response fashion

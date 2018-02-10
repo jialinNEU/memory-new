@@ -23,19 +23,29 @@ import socket from "./socket"
 //import run_demo from "./demo";
 import game_init from "./memory";
 
-function init() {
-  //let root = document.getElementById('game');
-  //game_init(root);
 
-  let channel = socket.channel(`games:${gameName}`, {});
-  channel.join()
-    .receive("ok", resp => { console.log("Joined successfully", resp); })
-    .receive("error", resp => { console.log("Unable to join", resp); });
+
+function init() {
 
   $("#confirm-btn").click( () => {
     let name = $("#name-input").val();
     window.location = `/games/${name}`;
   })
+
+  let root = document.getElementById('game');
+  if(!root) {
+    console.log("error");
+      return;
+  }
+
+  let channel = socket.channel(`games:${gameName}`, {});
+  console.log(channel);
+
+
+
+
+  game_init(root, channel);
+
 
 }
 

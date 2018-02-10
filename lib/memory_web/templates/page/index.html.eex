@@ -9,3 +9,16 @@
     <button id="confirm-btn">Confirm</button>
   </div>
 </div>
+
+<!--
+<script type="text/javascript">
+
+  let input = document.getElementById("name-input");
+  let input_name = input.value;
+  let button = document.getElementById("confirm-btn");
+  button.addEventListener("click", function(){
+    window.location = `/games/${input_name}`;
+  })
+
+</script>
+-->

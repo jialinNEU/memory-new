@@ -36,8 +36,17 @@ class Memory extends React.Component {
   }
 
   user_click(index) {
+
     this.channel.push("user_click", { index: index} )
     .receive("ok", this.gotView.bind(this));
+    let attempts = this.state.attempts;
+    if (attempts % 2 == 1) {
+      console.log(attempts);
+      window.setTimeout( () => {
+        this.channel.push("card_match", { index: index})
+        .receive("ok", this.gotView.bind(this));
+      }, 1500);
+    }
   }
 
   game_restart() {

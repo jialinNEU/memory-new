@@ -20,6 +20,15 @@ defmodule MemoryWeb.GamesChannel do
   end
 
 
+  def handle_in("card_match", %{"index" => idx}, socket) do
+    game0 = socket.assigns[:game]
+    game1 = Game.card_match(game0, idx)
+    GameBackup.save(socket.assigns[:name], game1)
+    socket = assign(socket, :game, game1)
+    {:reply, {:ok, %{"view" => Game.client_view(game1)} }, socket}
+  end
+
+
   def handle_in("game_restart", %{}, socket) do
     game1 = Game.new()
     GameBackup.save(socket.assigns[:name], game1)

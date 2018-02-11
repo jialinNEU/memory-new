@@ -2,11 +2,12 @@ defmodule MemoryWeb.GamesChannel do
   use MemoryWeb, :channel
 
   alias Memory.Game
+  alias Memory.GameBackup
 
   def join("games:" <> name, payload, socket) do
     if authorized?(payload) do
 
-      game = Game.new()
+      game = GameBackup.load(name) || Game.new()
 
       socket = socket
       |> assign(:game, game)
@@ -19,10 +20,20 @@ defmodule MemoryWeb.GamesChannel do
   end
 
 
+  def handle_in("game_restart", %{}, socket) do
+    game0 = socket.assigns[:game]
+    game1 = Game.new()
+    GameBackup.save(socket.assigns[:name], game1)
+    socket = assign(socket, :game, game1)
+    {:reply, {:ok, %{"view" => Game.client_view(game1)} }, socket}
+  end
+
 
   def handle_in("user_click", %{"index" => idx}, socket) do
     game0 = socket.assigns[:game]
     game1 = Game.handle_click(game0, idx);
+    GameBackup.save(socket.assigns[:name], game1)
+
     socket = assign(socket, :game, game1)
     {:reply, {:ok, %{"view" => Game.client_view(game1)} }, socket}
   end

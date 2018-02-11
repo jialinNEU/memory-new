@@ -26,6 +26,8 @@ defmodule Memory.Game do
   end
 
 
+
+
   # from old state to new state
   def handle_click(game, index) do
     screen_disabled = game.screen_disabled

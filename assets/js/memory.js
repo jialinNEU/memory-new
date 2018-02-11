@@ -41,7 +41,6 @@ class Memory extends React.Component {
   gotView(msg) {
     console.log("Got View", msg);
     this.setState(msg.view);
-    console.log(this.state);
   }
 
 /*
@@ -56,6 +55,11 @@ class Memory extends React.Component {
   user_click(index) {
     this.channel.push("user_click", { index: index} )
         .receive("ok", this.gotView.bind(this));
+  }
+
+  game_restart() {
+    this.channel.push("game_restart", {})
+        .receive("ok", this.gotView.bind(this))
   }
 
 /*
@@ -187,7 +191,7 @@ console.log(attempts);
         </div>
 
         <div className='row'>
-          <Button onClick={ this.restart.bind(this) }><b>Restart Game</b></Button>
+          <Button onClick={ this.game_restart.bind(this) }><b>Restart Game</b></Button>
         </div>
       </div>
     );

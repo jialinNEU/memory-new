@@ -34,18 +34,13 @@ function init() {
 
   let root = document.getElementById('game');
   if(!root) {
-    console.log("error");
-      return;
+    return;
   }
 
   let channel = socket.channel(`games:${gameName}`, {});
   console.log(channel);
 
-
-
-
   game_init(root, channel);
-
 
 }
 

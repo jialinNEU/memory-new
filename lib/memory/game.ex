@@ -22,6 +22,7 @@ defmodule Memory.Game do
       attempts: attempts,
       pre_card_idx: pre_card_idx,
       cards: cards,
+      screen_disabled: screen_disabled
     }
   end
 
@@ -36,7 +37,7 @@ defmodule Memory.Game do
     score = game.score
 
     {new_cards, new_attempts, new_score, new_pre_card_idx}
-      = update(index, game.cards, attempts, score, pre_card_idx, screen_disabled)
+    = update(index, game.cards, attempts, score, pre_card_idx, screen_disabled)
 
 
     %{
@@ -46,6 +47,8 @@ defmodule Memory.Game do
       pre_card_idx: new_pre_card_idx,
       screen_disabled: screen_disabled # debug
     }
+
+
   end
 
 
@@ -93,33 +96,29 @@ defmodule Memory.Game do
         {new_cards_unmatch, attempts, score, pre_card_idx}
       end
 
-    task
+      task
+    end
+
+    def init() do
+      cards = [
+        %{letter: "A", flag: false, match: false, index: 0},
+        %{letter: "A", flag: false, match: false, index: 1},
+        %{letter: "B", flag: false, match: false, index: 2},
+        %{letter: "B", flag: false, match: false, index: 3},
+        %{letter: "C", flag: false, match: false, index: 4},
+        %{letter: "C", flag: false, match: false, index: 5},
+        %{letter: "D", flag: false, match: false, index: 6},
+        %{letter: "D", flag: false, match: false, index: 7},
+        %{letter: "E", flag: false, match: false, index: 8},
+        %{letter: "E", flag: false, match: false, index: 9},
+        %{letter: "F", flag: false, match: false, index: 10},
+        %{letter: "F", flag: false, match: false, index: 11},
+        %{letter: "G", flag: false, match: false, index: 12},
+        %{letter: "G", flag: false, match: false, index: 13},
+        %{letter: "H", flag: false, match: false, index: 14},
+        %{letter: "H", flag: false, match: false, index: 15}
+      ]
+
+      Enum.shuffle(cards)
+    end
   end
-
-
-
-
-
-  def init() do
-    cards = [
-      %{letter: "A", flag: false, match: false, index: 0},
-      %{letter: "A", flag: false, match: false, index: 1},
-      %{letter: "B", flag: false, match: false, index: 2},
-      %{letter: "B", flag: false, match: false, index: 3},
-      %{letter: "C", flag: false, match: false, index: 4},
-      %{letter: "C", flag: false, match: false, index: 5},
-      %{letter: "D", flag: false, match: false, index: 6},
-      %{letter: "D", flag: false, match: false, index: 7},
-      %{letter: "E", flag: false, match: false, index: 8},
-      %{letter: "E", flag: false, match: false, index: 9},
-      %{letter: "F", flag: false, match: false, index: 10},
-      %{letter: "F", flag: false, match: false, index: 11},
-      %{letter: "G", flag: false, match: false, index: 12},
-      %{letter: "G", flag: false, match: false, index: 13},
-      %{letter: "H", flag: false, match: false, index: 14},
-      %{letter: "H", flag: false, match: false, index: 15}
-    ]
-
-    Enum.shuffle(cards)
-  end
-end
